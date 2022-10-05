@@ -1,5 +1,5 @@
 ﻿#Change path based on the location of file. Alternative is using import-csv for excel file
-#Replace "file-path" with the location of file. Example: "C:\temp\SHX Server.txt"
+#Replace "file-path" with the location of file. Example: "C:\temp\Server.txt"
 
 $Server_List = Get-Content "file-path"
 $Path = "HKLM:\System\CurrentControlSet\Control\SecurityProviders\SCHANNEL"
