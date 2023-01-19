@@ -1,4 +1,13 @@
 #this powershell script is used for stress test, to test the RAM usage to the limit. Use it with your own risk
+#Get-Counter cmdlet to retrieve performance counter data for the "Committed Bytes In Use" counter in the Memory performance object. 
+#The .CookedValue property is used to retrieve the current value of the counter, and the value is then compared to 80 using the -gt operator. 
+#If the value is greater than 80, the command will return True, otherwise it will return False.
+
+(Get-Counter -Counter "\Memory\% Committed Bytes In Use").CounterSamples.CookedValue -gt 80
+
+# or use this to get percentages:
+(Get-Counter -Counter "\Memory\% Committed Bytes In Use").CounterSamples.CookedValue 
+
 # Set the amount of memory to consume (in bytes)
 $memory = (2GB)
 
