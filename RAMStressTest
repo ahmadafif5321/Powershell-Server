@@ -1,0 +1,11 @@
+#this powershell script is used for stress test, to test the RAM usage to the limit. Use it with your own risk
+# Set the amount of memory to consume (in bytes)
+$memory = (2GB)
+
+# Create an array of integers with the specified size
+$array = New-Object 'System.Int32[]' $memory
+
+# Fill the array with random numbers
+for ($i = 0; $i -lt $array.Length; $i++) {
+    $array[$i] = Get-Random -Minimum 0 -Maximum 100
+}
