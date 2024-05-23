@@ -1,0 +1,36 @@
+$installerLocalPath = "C:\CopyFiles\npp.8.6.7.Installer.x64.exe"
+$installerRemotePath = "C:\Program Files\npp.8.6.7.Installer.x64.exe"
+$serverList = "C:\Copyfiles\server.txt"
+$installerArguments = "/S"  # Silent install argument for Notepad++
+$servers = Get-Content -Path $serverList
+$logFilePath = "C:\CopyFiles\install_log.txt"
+
+Start-Transcript -Path $logFilePath -Append
+
+foreach ($server in $servers) {
+    try {
+        $session = New-PSSession -ComputerName $server
+
+        # Copy the installer to the remote server
+        Copy-Item -Path $installerLocalPath -Destination $installerRemotePath -ToSession $session -Force
+        Write-Host "Installer copy to $server successful"
+
+        # Command to install the software
+        $installCommand = {
+            param($installerPath, $installerArguments)
+            Start-Process -FilePath $installerPath -ArgumentList $installerArguments -Wait
+        }
+
+        Invoke-Command -Session $session -ScriptBlock $installCommand -ArgumentList $installerRemotePath, $installerArguments
+        Write-Host "Software installation on $server successful"
+    }
+    catch {
+        Write-Host "Error during operation on {$server}: $_"
+    }
+    finally {
+        Remove-PSSession -Session $session
+        Write-Host "Session ended for $server"
+    }
+}
+
+Stop-Transcript
